@@ -71,4 +71,4 @@ Producción audiovisual 100% potenciada con inteligencia artificial.
 
 ---
 
-*Hecho con ♥ y mucha IA · 2025*
+*Hecho con ♥ y mucha IA · 2026*
