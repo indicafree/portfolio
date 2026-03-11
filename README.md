@@ -7,7 +7,7 @@
 
 ## 🚀 Ver portfolio en vivo
 
-🔗 **[flaviap11.github.io/portfolio](https://flaviap11.github.io/portfolio)** ← *(actualizá con tu link real)*
+🔗 **[indicafree.github.io/portfolio](https://indicafree.github.io/portfolio/index.html)**
 
 ---
 
@@ -15,14 +15,12 @@
 
 ```
 portfolio-flavia/
-│
-├── index.html                  ← Portfolio principal (una sola página)
-│
+├── index.html
 └── assets/
     └── images/
-        ├── la-cara-sur/        ← Proyecto: campaña outdoor
-        ├── papeleria/          ← Proyecto: emprendimiento papelería
-        └── youtube/            ← Proyecto: canal YouTube IA
+        ├── la-cara-sur/
+        ├── papeleria/
+        └── youtube/
 ```
 
 ---
