@@ -286,29 +286,33 @@
       box-shadow: 0 4px 24px rgba(0,0,0,.07);
       transition: transform .3s, box-shadow .3s;
       display: flex; flex-direction: column;
+      cursor: pointer;
     }
     .project-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,.14); }
+    .project-card:hover .card-cover-img { transform: scale(1.05); }
+    .project-card:hover .card-overlay { opacity: 1; }
 
-    .project-img {
-      height: 200px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem;
+    .card-cover {
+      aspect-ratio: 16/9;
       position: relative; overflow: hidden;
     }
-    .project-img.coral  { background: linear-gradient(135deg, #FF5C5C22, #FF5C5C55); }
-    .project-img.yellow { background: linear-gradient(135deg, #FFD93D22, #FFD93D55); }
-    .project-img.teal   { background: linear-gradient(135deg, #00C9A722, #00C9A755); }
-
-    .project-img-placeholder {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: .5rem;
+    .card-cover-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+      display: block;
     }
-    .placeholder-icon { font-size: 3rem; }
-    .placeholder-text {
-      font-size: .7rem; color: rgba(0,0,0,.4);
-      font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: rgba(13,13,13,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .3s;
+    }
+    .card-overlay span {
+      color: #fff; font-size: .8rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      border: 2px solid rgba(255,255,255,.7);
+      padding: .6rem 1.4rem; border-radius: 999px;
     }
 
     .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
@@ -336,6 +340,68 @@
       padding: .2rem .6rem; border-radius: 999px;
       letter-spacing: .03em;
     }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(13,13,13,.85);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--offwhite);
+      border-radius: 2rem;
+      width: 100%; max-width: 900px;
+      max-height: 90vh; overflow-y: auto;
+      transform: translateY(30px) scale(.97);
+      transition: transform .3s ease;
+      position: relative;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 38px; height: 38px;
+      background: var(--ink); color: #fff;
+      border: none; border-radius: 50%;
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10; transition: background .2s;
+    }
+    .modal-close:hover { background: var(--coral); }
+
+    .modal-header {
+      padding: 2rem 2rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+    .modal-header p  { color: var(--mid); font-size: .9rem; margin-top: .5rem; line-height: 1.7; }
+
+    .modal-body { padding: 1.5rem 2rem 2rem; }
+
+    .modal-gallery {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-gallery img {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover; border-radius: 1rem;
+      transition: transform .2s;
+      cursor: zoom-in;
+    }
+    .modal-gallery img:hover { transform: scale(1.02); }
+    .modal-gallery img.span2 { grid-column: span 2; }
+
+    .modal-video {
+      border-radius: 1rem; overflow: hidden;
+      aspect-ratio: 16/9; margin-bottom: 1.5rem;
+    }
+    .modal-video iframe { width: 100%; height: 100%; display: block; border: none; }
 
     /* ── PROCESS ── */
     #process {
@@ -574,142 +640,148 @@
       <p class="section-label">Proyectos</p>
       <h2 class="section-title">Lo que he creado<br>con IA</h2>
     </div>
-    <!-- PROJECT CARDS FULL WIDTH -->
-    <div style="display:flex; flex-direction:column; gap:4rem;">
+    <div class="projects-grid">
 
-      <!-- ── PROYECTO 1: LA CARA SUR ── -->
-      <div class="project-card reveal" style="border-radius:2rem; overflow:hidden; max-width:1100px; margin:0 auto; width:100%;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <!-- Cover image -->
-          <div style="position:relative; overflow:hidden; min-height:420px;">
-            <img src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur - Imagen de campaña principal"
-              style="width:100%; height:100%; object-fit:cover; display:block;"/>
-            <div style="position:absolute; inset:0; background:linear-gradient(to right, transparent 60%, rgba(247,244,239,0.95)); pointer-events:none;"></div>
-          </div>
-          <!-- Content + gallery -->
-          <div style="padding:2.5rem; display:flex; flex-direction:column; justify-content:space-between;">
-            <div>
-              <span class="project-tag tag-coral">Branding · Campaña · Identidad Sonora</span>
-              <h3 style="font-size:1.6rem; margin-bottom:1rem;">La Cara Sur</h3>
-              <p style="font-size:.88rem; color:var(--mid); line-height:1.7;">
-                Marca chilena de ropa outdoor con identidad <strong>aventurera, resistente y conectada con la naturaleza</strong>. 
-                Se creó la imagen de campaña principal con Ideogram — un montañista en la Patagonia con una chaqueta de la marca, 
-                atmósfera cinemática al amanecer. La identidad sonora (20-30 seg.) generada con Udio evoca aventura y superación, 
-                pensada para videos en redes sociales.
-              </p>
-            </div>
-            <!-- Mini gallery 1-6 -->
-            <div>
-              <p style="font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--coral); margin-bottom:.8rem;">Galería del proyecto</p>
-              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem;">
-                <img src="./assets/images/la_cara_sur/1.JPG" alt="La Cara Sur 1" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/la_cara_sur/2.JPG" alt="La Cara Sur 2" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur 3" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/la_cara_sur/4.JPG" alt="La Cara Sur 4" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/la_cara_sur/5.JPG" alt="La Cara Sur 5" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/la_cara_sur/6.JPG" alt="La Cara Sur 6" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; cursor:pointer; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-              </div>
-              <div class="project-tools" style="margin-top:1rem;">
-                <span class="tool-tag">Ideogram</span>
-                <span class="tool-tag">Udio</span>
-                <span class="tool-tag">Estrategia de Marca</span>
-                <span class="tool-tag">Identidad Sonora</span>
-              </div>
-            </div>
+      <!-- Card 1: La Cara Sur -->
+      <div class="project-card reveal" onclick="openModal('modal-lacasasur')">
+        <div class="card-cover">
+          <img class="card-cover-img" src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur"/>
+          <div class="card-overlay"><span>Ver proyecto →</span></div>
+        </div>
+        <div class="project-body">
+          <span class="project-tag tag-coral">Branding · Campaña</span>
+          <h3>La Cara Sur</h3>
+          <p>Activos de campaña para marca ficticia de ropa outdoor chilena — imagen cinemática e identidad sonora generadas con IA.</p>
+          <div class="project-tools">
+            <span class="tool-tag">Ideogram</span>
+            <span class="tool-tag">Udio</span>
+            <span class="tool-tag">Estrategia de Marca</span>
           </div>
         </div>
       </div>
 
-      <!-- ── PROYECTO 2: PAPELERÍA CREATIVA ── -->
-      <div class="project-card reveal" style="border-radius:2rem; overflow:hidden; max-width:1100px; margin:0 auto; width:100%;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <div style="padding:2.5rem; display:flex; flex-direction:column; justify-content:space-between;">
-            <div>
-              <span class="project-tag tag-yellow">Emprendimiento · E-commerce · Social Media</span>
-              <h3 style="font-size:1.6rem; margin-bottom:1rem;">Papelería Creativa</h3>
-              <p style="font-size:.88rem; color:var(--mid); line-height:1.7;">
-                Emprendimiento propio de papelería con identidad visual completa generada con IA. 
-                Incluye <strong>catálogo de productos</strong> con fotoproductos, 
-                <strong>flyers para Marketplace</strong> y <strong>mockups para San Valentín</strong> 
-                — muestra de cómo se vería el producto terminado. Todo el contenido mensual para redes 
-                sociales se diseñó con Canva + Gemini manteniendo coherencia visual de marca.
-              </p>
-            </div>
-            <div>
-              <p style="font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#b8910a; margin-bottom:.8rem;">Catálogo · Flyer · Mockups</p>
-              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem;">
-                <img src="./assets/images/papeleria/catalogo/4.png" alt="Catálogo papelería cover" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/papeleria/flyer/1.png" alt="Flyer marketplace" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-                <img src="./assets/images/papeleria/mockups/1.png" alt="Mockup San Valentín" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-              </div>
-              <div class="project-tools" style="margin-top:1rem;">
-                <span class="tool-tag">Gemini</span>
-                <span class="tool-tag">Canva</span>
-                <span class="tool-tag">Marketplace</span>
-                <span class="tool-tag">Social Media</span>
-              </div>
-            </div>
-          </div>
-          <!-- Cover image right -->
-          <div style="position:relative; overflow:hidden; min-height:420px;">
-            <img src="./assets/images/papeleria/catalogo/4.png" alt="Papelería Creativa cover"
-              style="width:100%; height:100%; object-fit:cover; display:block;"/>
-            <div style="position:absolute; inset:0; background:linear-gradient(to left, transparent 60%, rgba(247,244,239,0.95)); pointer-events:none;"></div>
+      <!-- Card 2: Papelería Creativa -->
+      <div class="project-card reveal" onclick="openModal('modal-papeleria')">
+        <div class="card-cover">
+          <img class="card-cover-img" src="./assets/images/papeleria/catalogo/4.png" alt="Papelería Creativa"/>
+          <div class="card-overlay"><span>Ver proyecto →</span></div>
+        </div>
+        <div class="project-body">
+          <span class="project-tag tag-yellow">Emprendimiento · Contenido</span>
+          <h3>Papelería Creativa</h3>
+          <p>Catálogo, flyers para Marketplace y mockups de San Valentín para emprendimiento propio de papelería.</p>
+          <div class="project-tools">
+            <span class="tool-tag">Gemini</span>
+            <span class="tool-tag">Canva</span>
+            <span class="tool-tag">Social Media</span>
           </div>
         </div>
       </div>
 
-      <!-- ── PROYECTO 3: CANAL YOUTUBE ── -->
-      <div class="project-card reveal" style="border-radius:2rem; overflow:hidden; max-width:1100px; margin:0 auto; width:100%;">
-        <!-- Banner full width -->
-        <div style="position:relative; height:200px; overflow:hidden;">
-          <img src="./assets/images/YouTube/branding/banner%20realista.png" alt="Canal YouTube banner"
-            style="width:100%; height:100%; object-fit:cover; display:block;"/>
-          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(13,13,13,.8), transparent); display:flex; align-items:flex-end; padding:1.5rem 2rem;">
-            <div>
-              <span class="project-tag tag-teal" style="margin-bottom:.4rem;">YouTube · Branding · Producción IA</span>
-              <h3 style="font-size:1.6rem; color:#fff; font-family:'Syne',sans-serif; font-weight:800;">Canal de YouTube IA</h3>
-            </div>
-          </div>
+      <!-- Card 3: Canal YouTube -->
+      <div class="project-card reveal" onclick="openModal('modal-youtube')">
+        <div class="card-cover">
+          <img class="card-cover-img" src="./assets/images/YouTube/branding/banner%20realista.png" alt="Canal YouTube"/>
+          <div class="card-overlay"><span>Ver proyecto →</span></div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; padding:2rem; gap:2rem;">
-          <!-- descripción + video -->
-          <div style="display:flex; flex-direction:column; gap:1rem;">
-            <p style="font-size:.88rem; color:var(--mid); line-height:1.7;">
-              Canal en desarrollo con producción audiovisual <strong>100% potenciada con IA</strong>. 
-              Guiones escritos con Claude, imágenes y escenas generadas con herramientas de video IA, 
-              identidad de marca (branding, banner, thumbnails) creada con IA generativa. 
-              Las escenas de <em>La Cara Sur</em> son contenido creado especialmente para la marca ficticia.
-            </p>
-            <div style="border-radius:1rem; overflow:hidden;">
-              <iframe src="https://www.youtube.com/embed/I7VlP42dnzM"
-                width="100%" height="180" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen style="display:block;">
-              </iframe>
-            </div>
-            <div class="project-tools">
-              <span class="tool-tag">Claude</span>
-              <span class="tool-tag">IA Visual</span>
-              <span class="tool-tag">IA Video</span>
-              <span class="tool-tag">Branding IA</span>
-            </div>
-          </div>
-          <!-- branding mini gallery -->
-          <div>
-            <p style="font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); margin-bottom:.8rem;">Branding & Escenas</p>
-            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:.5rem;">
-              <img src="./assets/images/YouTube/branding/banner%20realista.png" alt="Banner YouTube" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-              <img src="./assets/images/YouTube/videos/la_cara_sur/1.png" alt="Escena La Cara Sur 1" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-              <img src="./assets/images/YouTube/videos/la_cara_sur/2.png" alt="Escena La Cara Sur 2" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-              <img src="./assets/images/YouTube/videos/la_cara_sur/3.png" alt="Escena La Cara Sur 3" style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:.6rem; transition:transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
-            </div>
+        <div class="project-body">
+          <span class="project-tag tag-teal">YouTube · En proceso</span>
+          <h3>Canal de YouTube IA</h3>
+          <p>Producción audiovisual 100% con IA — guiones, imágenes, videos y branding generados con inteligencia artificial.</p>
+          <div class="project-tools">
+            <span class="tool-tag">Claude</span>
+            <span class="tool-tag">IA Visual</span>
+            <span class="tool-tag">IA Video</span>
           </div>
         </div>
       </div>
 
     </div>
   </section>
+
+  <!-- ══ MODAL: LA CARA SUR ══ -->
+  <div class="modal-backdrop" id="modal-lacasasur" onclick="closeModalOutside(event, 'modal-lacasasur')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-lacasasur')">✕</button>
+      <div class="modal-header">
+        <span class="project-tag tag-coral">Branding · Campaña · Identidad Sonora</span>
+        <h2>La Cara Sur</h2>
+        <p>Marca chilena de ropa outdoor — <strong>aventurera, resistente y conectada con la naturaleza</strong>. Se creó la imagen de campaña principal con Ideogram: un montañista en la Patagonia con atmósfera cinemática al amanecer. La identidad sonora (20-30 seg.) generada con Udio evoca aventura y superación para videos en redes sociales.</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-gallery">
+          <img src="./assets/images/la_cara_sur/1.JPG" alt="La Cara Sur 1"/>
+          <img src="./assets/images/la_cara_sur/2.JPG" alt="La Cara Sur 2"/>
+          <img src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur 3"/>
+          <img src="./assets/images/la_cara_sur/4.JPG" alt="La Cara Sur 4"/>
+          <img src="./assets/images/la_cara_sur/5.JPG" alt="La Cara Sur 5"/>
+          <img src="./assets/images/la_cara_sur/6.JPG" alt="La Cara Sur 6"/>
+        </div>
+        <div class="project-tools">
+          <span class="tool-tag">Ideogram</span>
+          <span class="tool-tag">Udio</span>
+          <span class="tool-tag">Estrategia de Marca</span>
+          <span class="tool-tag">Identidad Sonora</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: PAPELERÍA CREATIVA ══ -->
+  <div class="modal-backdrop" id="modal-papeleria" onclick="closeModalOutside(event, 'modal-papeleria')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-papeleria')">✕</button>
+      <div class="modal-header">
+        <span class="project-tag tag-yellow">Emprendimiento · E-commerce · Social Media</span>
+        <h2>Papelería Creativa</h2>
+        <p>Emprendimiento propio con identidad visual completa. Catálogo de productos con fotoproductos, flyer para Marketplace y mockups para San Valentín — muestra de cómo se vería el producto terminado. Diseñado con Canva + Gemini.</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-gallery">
+          <img src="./assets/images/papeleria/catalogo/4.png" alt="Catálogo cover" class="span2"/>
+          <img src="./assets/images/papeleria/flyer/1.png" alt="Flyer Marketplace"/>
+          <img src="./assets/images/papeleria/mockups/1.png" alt="Mockup San Valentín"/>
+        </div>
+        <div class="project-tools">
+          <span class="tool-tag">Gemini</span>
+          <span class="tool-tag">Canva</span>
+          <span class="tool-tag">Marketplace</span>
+          <span class="tool-tag">Social Media</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: CANAL YOUTUBE ══ -->
+  <div class="modal-backdrop" id="modal-youtube" onclick="closeModalOutside(event, 'modal-youtube')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-youtube')">✕</button>
+      <div class="modal-header">
+        <span class="project-tag tag-teal">YouTube · Branding · Producción IA</span>
+        <h2>Canal de YouTube IA</h2>
+        <p>Canal en desarrollo con producción <strong>100% potenciada con IA</strong>. Guiones escritos con Claude, imágenes y escenas generadas con herramientas de video IA, branding completo creado con IA generativa. Las escenas de La Cara Sur son contenido creado para la marca ficticia.</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-video">
+          <iframe src="https://www.youtube.com/embed/I7VlP42dnzM"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+        <div class="modal-gallery">
+          <img src="./assets/images/YouTube/branding/banner%20realista.png" alt="Banner YouTube" class="span2"/>
+          <img src="./assets/images/YouTube/videos/la_cara_sur/1.png" alt="Escena 1"/>
+          <img src="./assets/images/YouTube/videos/la_cara_sur/2.png" alt="Escena 2"/>
+          <img src="./assets/images/YouTube/videos/la_cara_sur/3.png" alt="Escena 3"/>
+        </div>
+        <div class="project-tools">
+          <span class="tool-tag">Claude</span>
+          <span class="tool-tag">IA Visual</span>
+          <span class="tool-tag">IA Video</span>
+          <span class="tool-tag">Branding IA</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- PROCESS -->
   <section id="process">
@@ -799,6 +871,26 @@
   </footer>
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Modals
+    function openModal(id) {
+      const m = document.getElementById(id);
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeModalOutside(e, id) {
+      if (e.target === document.getElementById(id)) closeModal(id);
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(m => {
+        m.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
     // Custom cursor
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('cursorRing');
