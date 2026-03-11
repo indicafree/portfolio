@@ -476,6 +476,35 @@
     }
     .stat-label { font-size: .78rem; color: var(--mid); }
 
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,.92);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img {
+      max-width: 100%; max-height: 90vh;
+      border-radius: 1rem;
+      box-shadow: 0 40px 80px rgba(0,0,0,.6);
+      transform: scale(.95);
+      transition: transform .25s ease;
+    }
+    .lightbox.open img { transform: scale(1); }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,.15);
+      border: none; border-radius: 50%; color: #fff;
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lightbox-close:hover { background: var(--coral); }
+
     /* ── FOOTER ── */
     footer {
       background: var(--ink); color: rgba(255,255,255,.4);
@@ -681,7 +710,7 @@
       <!-- Card 3: Canal YouTube -->
       <div class="project-card reveal" onclick="openModal('modal-youtube')">
         <div class="card-cover">
-          <img class="card-cover-img" src="./assets/images/YouTube/branding/banner%20realista.png" alt="Canal YouTube"/>
+          <img class="card-cover-img" src="./assets/images/YouTube/branding/banner_realista.png" alt="Canal YouTube"/>
           <div class="card-overlay"><span>Ver proyecto →</span></div>
         </div>
         <div class="project-body">
@@ -710,12 +739,12 @@
       </div>
       <div class="modal-body">
         <div class="modal-gallery">
-          <img src="./assets/images/la_cara_sur/1.JPG" alt="La Cara Sur 1"/>
-          <img src="./assets/images/la_cara_sur/2.JPG" alt="La Cara Sur 2"/>
-          <img src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur 3"/>
-          <img src="./assets/images/la_cara_sur/4.JPG" alt="La Cara Sur 4"/>
-          <img src="./assets/images/la_cara_sur/5.JPG" alt="La Cara Sur 5"/>
-          <img src="./assets/images/la_cara_sur/6.JPG" alt="La Cara Sur 6"/>
+          <img src="./assets/images/la_cara_sur/1.JPG" alt="La Cara Sur 1" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/la_cara_sur/2.JPG" alt="La Cara Sur 2" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/la_cara_sur/3.JPG" alt="La Cara Sur 3" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/la_cara_sur/4.JPG" alt="La Cara Sur 4" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/la_cara_sur/5.JPG" alt="La Cara Sur 5" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/la_cara_sur/6.JPG" alt="La Cara Sur 6" onclick="openLightbox(this.src)"/>
         </div>
         <div class="project-tools">
           <span class="tool-tag">Ideogram</span>
@@ -738,9 +767,12 @@
       </div>
       <div class="modal-body">
         <div class="modal-gallery">
-          <img src="./assets/images/papeleria/catalogo/4.png" alt="Catálogo cover" class="span2"/>
-          <img src="./assets/images/papeleria/flyer/1.png" alt="Flyer Marketplace"/>
-          <img src="./assets/images/papeleria/mockups/1.png" alt="Mockup San Valentín"/>
+          <img src="./assets/images/papeleria/catalogo/4.png" alt="Catálogo cover" class="span2" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/papeleria/flyer/1.png" alt="Flyer Marketplace" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/papeleria/mockups/unnamed.jpg" alt="Mockup 1" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/papeleria/mockups/unnamed (1).jpg" alt="Mockup 2" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/papeleria/mockups/Gemini_Generated_Image_vzf1bpvzf1bpvzf1.png" alt="Mockup Gemini 1" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/papeleria/mockups/Gemini_Generated_Image_br2wvbr2wvbr2wvb.png" alt="Mockup Gemini 2" onclick="openLightbox(this.src)"/>
         </div>
         <div class="project-tools">
           <span class="tool-tag">Gemini</span>
@@ -768,10 +800,8 @@
             allowfullscreen></iframe>
         </div>
         <div class="modal-gallery">
-          <img src="./assets/images/YouTube/branding/banner%20realista.png" alt="Banner YouTube" class="span2"/>
-          <img src="./assets/images/YouTube/videos/la_cara_sur/1.png" alt="Escena 1"/>
-          <img src="./assets/images/YouTube/videos/la_cara_sur/2.png" alt="Escena 2"/>
-          <img src="./assets/images/YouTube/videos/la_cara_sur/3.png" alt="Escena 3"/>
+          <img src="./assets/images/YouTube/branding/Gemini_Generated_Image_47066f47066f4706.png" alt="Miniatura canal" class="span2" onclick="openLightbox(this.src)"/>
+          <img src="./assets/images/YouTube/branding/banner_realista.png" alt="Banner YouTube" class="span2" onclick="openLightbox(this.src)"/>
         </div>
         <div class="project-tools">
           <span class="tool-tag">Claude</span>
@@ -885,10 +915,13 @@
       if (e.target === document.getElementById(id)) closeModal(id);
     }
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(m => {
-        m.classList.remove('open');
-        document.body.style.overflow = '';
-      });
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => {
+          m.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+        closeLightbox();
+      }
     });
 
     // Custom cursor
@@ -920,6 +953,18 @@
       });
     });
 
+    // Lightbox
+    function openLightbox(src) {
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = src;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
     // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
@@ -929,6 +974,11 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt=""/>
+  </div>
+
 </body>
 </html>
